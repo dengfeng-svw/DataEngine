@@ -1,4 +1,39 @@
+# Action1
 s1 = 0
 for i in range(2, 101, 2):
     s1 = s1 + i
 print(s1)
+
+# Action2
+import pandas as pd
+chart = {'语文': [68, 95, 98, 90, 80], '数学': [65, 76, 86, 88, 90], '英语': [30, 98, 88, 77, 90]}
+df = pd.DataFrame(chart, index=['张飞', '关羽', '刘备', '典韦', '许褚'])
+print('平均成绩：')
+print(df.mean())
+print('最小成绩：')
+print(df.min())
+print('最大成绩：')
+print(df.max())
+print('方差：')
+print(df.var())
+print('标准差：')
+print(df.std())
+df['总分'] = df.sum(axis=1)
+print(df.sort_values(by='总分', ascending=False))
+
+# Action3
+import pandas as pd
+result = pd.read_csv('D:\python\Data_Engine_with_Python-master\car_complain.csv', encoding='utf-8')
+df = pd.DataFrame(result)
+
+df = df.drop('problem', 1).join(df.problem.str.get_dummies(','))
+
+com_brand = df.groupby('brand')['id'].count()
+print(com_brand.sort_values(ascending=False))
+
+com_model = df.groupby('car_model')['id'].count()
+print(com_model.sort_values(ascending=False))
+
+ave_model_count = df.groupby(['brand', 'car_model'])['id'].agg(['count'])\
+.groupby('brand').mean().sort_values(by='count', ascending=False)
+print('平均车型投诉最多的品牌为：', ave_model_count.index[0])
